@@ -681,8 +681,8 @@ const group2_turns = {
         },
         {
             id: "2.307",
-            difficulty: "C",
-            value: "0.30",
+            difficulty: "D",
+            value: "0.40",
             nameEn: "2/1 (720°) pirouette starting with free leg at horizontal, lowering to complete the turn in wolf position",
             namedAfter: "Nguyen 阮",
             nameZh: ["蹲转720", "开始水平平腿，完成落下成蹲转720°", "Nguyen", "阮"],
