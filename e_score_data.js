@@ -4,7 +4,7 @@
 
 const gymnastsData = [
     // Algeria
-    { id: "nemour", nameEn: "Kaylia Nemour", country: "ALG", adMean: 0.4, edBase: 8.1,
+    { id: "nemour", nameEn: "Kaylia Nemour", country: "ALG", adMean: 0.4, edBase: 8.1, usualD: 5.5, 
         tags: ["erratic", "fall"] },
     
     // Australia
@@ -18,11 +18,11 @@ const gymnastsData = [
     { id: "brassart", nameEn: "Maellyse Brassart", country: "BEL", adMean: 0.2, edBase: 8.0 },
     
     // Brazil
-    { id: "saraiva", nameEn: "Flavia Saraiva", country: "BRA", adMean: 0.2, edBase: 8.4,
+    { id: "saraiva", nameEn: "Flavia Saraiva", country: "BRA", adMean: 0.2, edBase: 8.4, usualD: 5.6,
         tags: ["erratic"]  },
     { id: "barbosa", nameEn: "Jade Barbosa", country: "BRA", adMean: 0.3, edBase: 8.0 },
     { id: "soares", nameEn: "Julia Soares", country: "BRA", adMean: 0.2, edBase: 8.2  },
-    { id: "andrade", nameEn: "Rebeca Andrade", country: "BRA", adMean: 0.2, edBase: 8.3,
+    { id: "andrade", nameEn: "Rebeca Andrade", country: "BRA", adMean: 0.2, edBase: 8.3, usualD: 6.1,
         tags: ["stable"]   },
     
     // Canada
@@ -32,13 +32,13 @@ const gymnastsData = [
     { id: "black", nameEn: "Elisabeth Black", country: "CAN", adMean: 0.3, edBase: 8.3 },
     
     // China
-    { id: "ou", nameEn: "Ou Yushan", country: "CHN", adMean: 0.4, edBase: 8.3,
+    { id: "ou", nameEn: "Ou Yushan", country: "CHN", adMean: 0.4, edBase: 8.3, usualD: 5.6,
         tags: ["erratic","fall"]   },
-    { id: "qiu", nameEn: "Qiu Qiyuan", country: "CHN", adMean: 0.3, edBase: 8.4,
+    { id: "qiu", nameEn: "Qiu Qiyuan", country: "CHN", adMean: 0.3, edBase: 8.4, usualD: 5.1,
         tags: ["stable"]   },
-    { id: "zhang", nameEn: "Zhang Yihan", country: "CHN", adMean: 0.5, edBase: 8.3,
+    { id: "zhang", nameEn: "Zhang Yihan", country: "CHN", adMean: 0.5, edBase: 8.3, usualD: 5.7,
         tags: ["strict", "erratic"]   },
-    { id: "zhou", nameEn: "Zhou Yaqin", country: "CHN", adMean: 0.4, edBase: 8.2,
+    { id: "zhou", nameEn: "Zhou Yaqin", country: "CHN", adMean: 0.4, edBase: 8.2, usualD: 5.5,
         tags: ["erratic"]   },
     
     // Colombia
@@ -51,9 +51,9 @@ const gymnastsData = [
     { id: "mahmoud", nameEn: "Jana Mahmoud", country: "EGY", adMean: 0.4, edBase: 8.0 },
     
     // France
-    { id: "mdjds", nameEn: "Melanie de Jesus Dos Santos", country: "FRA", adMean: 0.4, edBase: 8.5,
+    { id: "mdjds", nameEn: "Melanie de Jesus Dos Santos", country: "FRA", adMean: 0.4, edBase: 8.5, usualD: 5.7,
         tags: ["fall","stable", "erratic"]   },
-    { id: "eijken", nameEn: "Ming van Eijken", country: "FRA", adMean: 0.4, edBase: 8.3 },
+    { id: "eijken", nameEn: "Ming van Eijken", country: "FRA", adMean: 0.4, edBase: 8.3, usualD: 5.6 },
     { id: "osyssek", nameEn: "Morgane Osyssek-Reimer", country: "FRA", adMean: 0.4, edBase: 8.5 },
     
     // Germany
@@ -64,7 +64,7 @@ const gymnastsData = [
     // Great Britain
     { id: "martin", nameEn: "Abigail Martin", country: "GBR", adMean: 0.5, edBase: 8.1 },
     { id: "fenton", nameEn: "Georgia-Mae Fenton", country: "GBR", adMean: 0.3, edBase: 8.2 },
-    { id: "evans", nameEn: "Ruby Evans", country: "GBR", adMean: 0.4, edBase: 8.2 },
+    { id: "evans", nameEn: "Ruby Evans", country: "GBR", adMean: 0.4, edBase: 8.2 , usualD: 5.7 },
     
     // Haiti
     { id: "brown", nameEn: "Lynzee Brown", country: "HAI", adMean: 0.6, edBase: 8.0 },
@@ -77,14 +77,14 @@ const gymnastsData = [
         tags: ["erratic"]   },
     { id: "andreoli", nameEn: "Angela Andreoli", country: "ITA", adMean: 0.4, edBase: 8.2,
         tags: ["strict"]   },
-    { id: "esposito", nameEn: "Manila Esposito", country: "ITA", adMean: 0.3, edBase: 8.1,
+    { id: "esposito", nameEn: "Manila Esposito", country: "ITA", adMean: 0.3, edBase: 8.1, usualD: 5.7,
         tags: ["stable"]   },
     
     // Japan
-    { id: "nakamura", nameEn: "Haruka Nakamura", country: "JPN", adMean: 0.4, edBase: 8.3,
+    { id: "nakamura", nameEn: "Haruka Nakamura", country: "JPN", adMean: 0.4, edBase: 8.3, usualD: 5.6,
         tags: ["erratic"]   },
-    { id: "okumura", nameEn: "Mana Okumura", country: "JPN", adMean: 0.3, edBase: 8.3 },
-    { id: "kishi", nameEn: "Rina Kishi", country: "JPN", adMean: 0.3, edBase: 8.1 ,
+    { id: "okumura", nameEn: "Mana Okumura", country: "JPN", adMean: 0.3, edBase: 8.3 ,usualD: 5.5},
+    { id: "kishi", nameEn: "Rina Kishi", country: "JPN", adMean: 0.3, edBase: 8.1 , usualD: 5.8,
         tags: ["strict"]   },
     { id: "ushioku", nameEn: "Kohane Ushioku", country: "JPN", adMean: 0.4, edBase: 8.5 },
     
@@ -98,7 +98,7 @@ const gymnastsData = [
     
     // Netherlands
     { id: "wevers", nameEn: "Lieke Wevers", country: "NED", adMean: 0.3, edBase: 8.5 },
-    { id: "visser", nameEn: "Naomi Visser", country: "NED", adMean: 0.3, edBase: 8.2,
+    { id: "visser", nameEn: "Naomi Visser", country: "NED", adMean: 0.3, edBase: 8.2, usualD: 5.6,
         tags: ["erratic"]   },
     { id: "volleman", nameEn: "Tisha Volleman", country: "NED", adMean: 0.3, edBase: 7.9 },
     
@@ -117,15 +117,15 @@ const gymnastsData = [
     { id: "martins", nameEn: "Filipa Martins", country: "POR", adMean: 0.5, edBase: 8.3 },
     
     // North Korea
-    { id: "an", nameEn: "An Chang Ok", country: "PRK", adMean: 0.6, edBase: 7.9,
+    { id: "an", nameEn: "An Chang Ok", country: "PRK", adMean: 0.6, edBase: 7.9, usualD: 5.5,
         tags: ["strict", "erratic"]   },
     
     // Romania
     { id: "ghigoarta", nameEn: "Amalia Ghigoarta", country: "ROU", adMean: 0.3, edBase: 8.4 },
-    { id: "barbosu", nameEn: "Ana Barbosu", country: "ROU", adMean: 0.3, edBase: 8.5,
+    { id: "barbosu", nameEn: "Ana Barbosu", country: "ROU", adMean: 0.3, edBase: 8.5, usualD: 5.6,
         tags: ["stable", "erratic"]   },
     { id: "cosman", nameEn: "Lilia Cosman", country: "ROU", adMean: 0.4, edBase: 7.7 },
-    { id: "voinea", nameEn: "Sabrina Maneca-Voinea", country: "ROU", adMean: 0.4, edBase: 8.2,
+    { id: "voinea", nameEn: "Sabrina Maneca-Voinea", country: "ROU", adMean: 0.4, edBase: 8.2, usualD: 5.9,
         tags: ["strict", "erratic"]   },
     
     // South Africa
@@ -146,11 +146,12 @@ const gymnastsData = [
     { id: "lashchevska", nameEn: "Anna Lashchevska", country: "UKR", adMean: 0.6, edBase: 8.1 },
     
     // United States
-    { id: "carey", nameEn: "Jade Carey", country: "USA", adMean: 0.4, edBase: 7.8 },
-    { id: "chiles", nameEn: "Jordan Chiles", country: "USA", adMean: 0.4, edBase: 8.4 ,
+    { id: "carey", nameEn: "Jade Carey", country: "USA", adMean: 0.4, edBase: 7.8 , usualD: 6.2,
+        tags: ["strict"]},
+    { id: "chiles", nameEn: "Jordan Chiles", country: "USA", adMean: 0.4, edBase: 8.4 , usualD: 5.9,
         tags: ["stable", "erratic"]  },
-    { id: "biles", nameEn: "Simone Biles", country: "USA", adMean: 0.5, edBase: 8.7 ,
+    { id: "biles", nameEn: "Simone Biles", country: "USA", adMean: 0.5, edBase: 8.7 , usualD: 6.7,
         tags: ["stable"]  },
-    { id: "lee", nameEn: "Sunisa Lee", country: "USA", adMean: 0.3, edBase: 8.5,
+    { id: "lee", nameEn: "Sunisa Lee", country: "USA", adMean: 0.3, edBase: 8.5, usualD: 5.5,
         tags: ["stable"]   }
 ];
