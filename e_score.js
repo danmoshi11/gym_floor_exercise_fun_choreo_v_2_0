@@ -1,29 +1,53 @@
 // ==========================================
 // 自由体操 E分(执行分) 计算引擎 (e_score.js)
-// 包含物理场地特性与 4大核心 Tags 标签系统
+// 包含物理场地特性、标签系统与【D分体力阈值系统】
 // ==========================================
 
 const ExecutionEngine = {
     
-    // 模拟单个裁判打分：引入标签影响
-    generateJudgeScore: function(baseScore, tags = []) {
+    // 模拟单个裁判打分：引入标签影响 + 阈值影响
+    generateJudgeScore: function(baseScore, tags = [], deltaD = 0) {
         let fluctuation = 0;
 
+        // 核心：每次亮相，先摇一次总骰子，摇出 0.0 到 1.0 之间的数
+        let roll = Math.random(); 
+
         if (tags.includes('erratic')) {
-            // 神经刀：40%概率崩盘扣大分，60%概率极大波动 (-0.5 到 +0.5)
-            if (Math.random() < 0.20) {
-                fluctuation = -(Math.random() * 0.5 + 0.1); 
-            } else if (Math.random() > 0.85) {
-                fluctuation = (Math.random() * 0.5 + 0.1); 
-            } else {
-                fluctuation = (Math.random() * 0.6) - 0.3; 
+            // ==========================================
+            // 神经刀选手 (你调整后的参数)
+            // ==========================================
+            if (roll < 0.20) { 
+                fluctuation = (Math.random() * 0.4) - 0.4; // 范围 [-0.4 到 -0.0)
+            } else if (roll < 0.35) { 
+                fluctuation = (Math.random() * 0.2);       // 范围 [0.0 到 +0.2)
+            } else { 
+                fluctuation = (Math.random() * 0.8) - 0.4; // 范围 [-0.4 到 +0.4)
             }
         } else if (tags.includes('stable')) {
-            // 大心脏：整体打分区间上移，拿高分的概率大幅增加 (-0.1 到 +0.4)
-            fluctuation = (Math.random() * 0.5) - 0.2;
+            // ==========================================
+            // 大心脏选手 (你调整后的参数: -0.2 到 +0.3)
+            // ==========================================
+            fluctuation = (Math.random() * 0.5) - 0.2; 
         } else {
-            // 普通选手：标准自然波动 (-0.3 到 +0.3)
+            // ==========================================
+            // 普通选手 (-0.3 到 +0.3)
+            // ==========================================
             fluctuation = (Math.random() * 0.6) - 0.3; 
+        }
+
+        // ==========================================
+        // 【新增】D分体力阈值干预 (超难度压分，降难度抬分)
+        // ==========================================
+        if (deltaD >= 0.4) {
+            let shift = -0.5 * deltaD; // 差值偏移 (超0.5难度，E分中枢降0.1)
+            let spread = 0.1 * Math.abs(deltaD); // 波动扩大
+            let extraFluctuation = shift + (Math.random() * spread * 2) - spread;
+            fluctuation += extraFluctuation;
+        } else if (deltaD <= 0.4) {
+            let shift = -0.5 * safeDelta; // 降 0.4 难度时，中枢最大抬高 +0.08 分
+            let spread = 0.04 * Math.abs(safeDelta); // 降难度发挥更稳，盲盒波动范围缩小
+            let extraFluctuation = shift + (Math.random() * spread * 2) - spread;
+            fluctuation += extraFluctuation;
         }
 
         let finalScore = baseScore + fluctuation;
@@ -31,20 +55,32 @@ const ExecutionEngine = {
         return parseFloat(finalScore.toFixed(1)); 
     },
 
-    // 核心 E 分计算公式
-    calculateEScore: function(gymnastId, tracks) {
+    // 核心 E 分计算公式 (接收 actualD 实际D分参数)
+    calculateEScore: function(gymnastId, tracks, actualD = 0) {
         const gymnast = gymnastsData.find(g => g.id === gymnastId);
         if (!gymnast) return null;
 
         const currentBrand = window.currentRoutineData ? window.currentRoutineData.brand : 'gymnova';
-        const tags = gymnast.tags || []; // 提取选手的标签，若无则为空数组
+        const tags = gymnast.tags || []; 
+
+        // ==================================================
+        // 【新增】获取该选手的常用 D分，计算体力阈值差
+        // ==================================================
+        const usualD = gymnast.usualD || 0; 
+        let deltaD = 0;
+        if (usualD > 0 && actualD > 0) {
+            deltaD = actualD - usualD;
+            
+            // 🛑 【防逃课机制：不对称极值限制】
+            // 玩家超难度时：最多承受 +1.2 的惩罚差值
+            // 玩家逃课降难度时：最多只能享受 -0.5 的奖励差值（降再多也不会继续涨 E 分了）
+            deltaD = Math.max(-1.0, Math.min(2.0, deltaD));
+        }
 
         // ==================================================
         // 核心玄学 A：艺术分(AD)计算
         // ==================================================
         let finalAD = gymnast.adMean;
-        
-        // 30% 概率自然波动 (±0.1)
         let adRand = Math.random();
         if (adRand < 0.15) finalAD += 0.1; 
         else if (adRand < 0.30) finalAD -= 0.1;
@@ -65,22 +101,26 @@ const ExecutionEngine = {
         };
 
         // ==================================================
-        // 生成裁判平均分 (传入 tags)
+        // 生成裁判平均分 (将 deltaD 传给裁判)
         // ==================================================
         for (let i = 0; i < 3; i++) {
-            report.judges.push(this.generateJudgeScore(gymnast.edBase, tags));
+            report.judges.push(this.generateJudgeScore(gymnast.edBase, tags, deltaD));
         }
         let sum = report.judges.reduce((a, b) => a + b, 0);
         report.averageScore = parseFloat((sum / 3).toFixed(3));
 
         // ==================================================
-        // 核心玄学 B：计算最终摔倒概率 (场地 + fall/stable标签)
+        // 核心玄学 B：计算最终摔倒概率 (保留了你修改的数值)
         // ==================================================
-        let fallProbability = 0.08; // 基础 5%
-        if (currentBrand === 'taishan') fallProbability += 0.05; // Taishan 地板加 5% 失误率
-        
-        if (tags.includes('fall')) fallProbability += 0.08; // 易失误加 8%
-        if (tags.includes('stable')) fallProbability = Math.max(0.01, fallProbability - 0.02); // 大心脏减 2% 失误率
+        let fallProbability = 0.05; 
+        if (currentBrand === 'taishan') fallProbability += 0.03; 
+        if (tags.includes('fall')) fallProbability += 0.05; 
+        if (tags.includes('stable')) fallProbability = Math.max(0.01, fallProbability - 0.03); 
+
+        // 【新增】超负荷摔倒惩罚：如果难度超了常用难度 0.4 以上，额外增加 5% 摔倒率！
+        if (deltaD > 0.4) {
+            fallProbability += 0.05; 
+        }
 
         tracks.forEach(track => {
             if (track.type === 'line' && track.skills && track.skills.length > 0) {
@@ -93,20 +133,18 @@ const ExecutionEngine = {
         });
 
         // ==================================================
-        // 核心玄学 C：计算额外 E 分扣罚 (场地 + strict严扣标签)
+        // 核心玄学 C：计算额外 E 分扣罚 (保留了你修改的数值)
         // ==================================================
         let extraEDeduction = 0;
         
-        // 特性 1: Spieth 场地暗雷 (30%概率触发 0.1~0.5 随机扣分)
         if (currentBrand === 'spieth') {
-            if (Math.random() < 0.1) {
-                extraEDeduction += parseFloat((Math.random() * 0.4 + 0.1).toFixed(1));
+            if (Math.random() < 0.15) {
+                extraEDeduction += parseFloat((Math.random() * 0.2 + 0.1).toFixed(1));
             }
         }
 
-        // 特性 2: strict 严扣标签 (必定额外扣 0.1~0.3 分)
         if (tags.includes('strict')) {
-            extraEDeduction += parseFloat((Math.random() * 0.1).toFixed(1));
+            extraEDeduction += parseFloat((Math.random() * 0.2).toFixed(1));
         }
 
         // ==================================================

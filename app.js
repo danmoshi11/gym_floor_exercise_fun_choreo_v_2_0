@@ -76,6 +76,7 @@ const AppController = {
             display.classList.remove('hidden');
             if(customInput) customInput.classList.add('hidden');
             
+            
             // 【核心修改】：动态拼接 assets 路径，并加上 onerror 容错保护
             const imgPath = `./assets/${g.id}.png`; // 如果你存的是 jpg，请改为 .jpg
             avatarBox.innerHTML = `<img src="${imgPath}" class="w-full h-full object-cover" onerror="this.outerHTML='<span class=\\'text-slate-300\\'>👤</span>'">`;
@@ -83,6 +84,12 @@ const AppController = {
             document.getElementById('setupGymnastFlag').innerHTML = this.getFlag(g.country);
             document.getElementById('setupGymnastName').innerText = g.nameEn;
             document.getElementById('setupGymnastStats').innerText = `已载入该选手专属模型`;
+            const currentBrand = window.currentRoutineData ? window.currentRoutineData.brand : 'gymnova';
+            if (currentBrand === 'gaofei' && g.country !== 'CHN') {
+                alert("⚠️ 当前选中选手为非中国籍，无法适应高飞场地，系统已自动切回默认 Gymnova 场地。");
+                if (typeof selectBrand === 'function') selectBrand('gymnova');
+            }
+            
         }
     },
 
@@ -458,10 +465,15 @@ const AppController = {
             window.currentRoutineData.gymnastName = customName;
             document.getElementById('customScoreModal').classList.remove('hidden');
         } else {
+            // 数据库名将模式
             const gymnast = gymnastsData.find(g => g.id === mode);
             if (!gymnast) return;
             window.currentRoutineData.gymnastName = gymnast.nameEn;
-            window.currentEScoreReport = ExecutionEngine.calculateEScore(mode, canvasManager.tracks);
+            // 【核心修改】：获取当前画板上的真实总 D 分
+            const actualDScore = window.currentScoreReport ? window.currentScoreReport.totalD : 0;
+            // 【核心修改】：将 actualDScore 传给算分引擎！
+            window.currentEScoreReport = ExecutionEngine.calculateEScore(mode, canvasManager.tracks, actualDScore);
+            
             this.playShowcase();
         }
     },
